@@ -1,0 +1,128 @@
+[tool.poetry]
+name = "static-feature-in-attention-layer"
+version = "0.1.0"
+description = "TODO"
+authors = ["Anonymous Anonymous <anonymous@example.com>"]
+readme = "README.md"
+# packages = [{include = "static_feature_in_attention_layer"}]
+
+# DEPENDENCIES
+[tool.poetry.dependencies]
+python = "^3.10"
+awswrangler = { extras = ["deltalake"], version = "^3.3.0" }
+boto3 = "^1.28.52"                                           # required to access with AWS services
+cloudpathlib = {extras = ["s3"], version = "^0.13.0"}
+cloudpickle = "^2.2.1"                                       # required to load MLflow PyFunc models
+fastparquet = "^2023.10.1"
+loguru = "^0.7.2"
+matplotlib = "^3.7.2"                                        # required to generate plots with MLflow
+mlflow-skinny = "^2.8.1"
+omegaconf = "^2.3.0"
+pandas = "2.1.0"
+pandera = "^0.16.1"
+psutil = "^5.9.5"                                            # required to load MLflow PyFunc models
+pyarrow = "^13.0.0"                                          # required to read parquet files with pandas
+pydantic = "^1.10.12"
+s3fs = "<0.4"                                                # required to read remote AWS S3 files with pandas
+scikit-learn = "1.5.0"
+
+# Extras: tests dependencies required to run unit tests
+torch = { version = "2.3.1" }
+numpy = { version = "1.23.5", optional = true }
+moto = { version = "^4.2.13", optional = true }
+pytest = { version = "^7.4.2", optional = true }
+alembic = { version = "^1.12.0", optional = true }
+sqlalchemy = { version = "^2.0.20", optional = true }
+
+# extras are used to install additional dependencies in production
+neuralforecast = "1.7.5"
+pyspark = "3.5.0"
+delta-spark = "^3.1.0"
+holidays = "0.44"
+numba = "^0.59.1"
+
+[tool.poetry.extras]
+tests = ["moto", "pytest", "alembic", "sqlalchemy"]
+
+# groups are used to install additional dependencies in development
+[tool.poetry.group.dev.dependencies]
+dbx = "^0.8.18"
+ipykernel = "^6.25.2"
+pre-commit = "^3.4.0"
+urllib3 = "<2.0"   
+
+[tool.poetry.group.checkers.dependencies]
+coverage = "^7.3.1"
+moto = "^4.2.13"
+mypy = "^1.5.1"
+pylint = "^2.17.5"
+pyspark_test = "^0.2.0"
+pytest = "^7.4.2"
+pytest-cov = "^4.1.0"
+pytest-mock = "^3.12.0"
+pytest-xdist = "^3.3.1"
+types-python-dateutil = "^2.9.0.20240316"
+
+[tool.poetry.group.documenters.dependencies]
+myst-parser = "^2.0.0"
+sphinx = "^7.2.5"
+sphinx-rtd-theme = "^1.3.0"
+sphinxemoji = "^0.2.0"
+
+[tool.poetry.group.formatters.dependencies]
+isort = "^5.12.0"
+black = "^23.9.1"
+
+[tool.poetry.group.mlflow.dependencies]
+alembic = "^1.12.0"
+sqlalchemy = "^2.0.20"
+
+[tool.poetry.group.publishers.dependencies]
+twine = "^4.0.2"
+
+# CONFIGURATIONS
+
+[tool.black]
+# source line length
+line-length = 120
+
+[tool.coverage.run]
+# report every branch
+branch = true
+# source code to cover
+source = [ "src" ]
+
+[tool.isort]
+# same length as black
+line_length = 120
+# associate isort with black
+profile = "black"
+
+[tool.mypy]
+# check untyped definitions
+check_untyped_defs = true
+# don't fail on missing imports
+ignore_missing_imports = true
+# add additional plugins to mypy
+plugins = [ "pandera.mypy", "pydantic.mypy" ]
+
+[tool.pylint.MASTER]
+# list false positives
+disable = [
+    'invalid-name',
+    'too-few-public-methods',
+    'too-many-arguments',
+    'too-many-instance-attributes',
+    'too-many-locals',
+]
+# same lengthas Black
+max-line-length = 120
+# pydantic is not recognized yet
+extension-pkg-whitelist = "pydantic"
+
+# SYSTEMS
+[build-system]
+# add pyproject plugins
+requires = ["poetry-core"]
+# build the package with poetry
+build-backend = "poetry.core.masonry.api"
